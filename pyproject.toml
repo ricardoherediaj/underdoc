@@ -1,0 +1,10 @@
+[project]
+name = "underdoc"
+version = "0.1.0"
+description = "Turn an approved post idea into a Substack draft in Ricardo's voice: research (Nova), writing (Brown) and the Underdoc MCP server."
+readme = "README.md"
+requires-python = ">=3.14.0"
+dependencies = []
+
+[tool.uv.workspace]
+members = ["packages/*"]
