@@ -52,7 +52,7 @@
       "depends_on": [
         "s0-001"
       ],
-      "notes": "Open decision: import from research_agent_part_3 (deployable) or research_agent_part_2. Resolves assumption A4 (Python 3.14) for Nova."
+      "notes": "Decided 2026-10-24: import from the course repo lessons/research_agent_part_3 (deployable, auth and Docker). Resolves assumption A4 (Python 3.14) for Nova. Needs the course repo work committed first."
     },
     {
       "id": "s0-003",

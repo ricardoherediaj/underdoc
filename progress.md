@@ -8,11 +8,14 @@
 - Highest-priority unfinished feature: `s0-002` (import Nova). `s0-001` and `s3-001` are passing, commit pending owner review.
 - Current blocker: none.
 
-## Open decisions
+## Decisions
 
-- Writer model: GLM-5.3 vs DeepSeek V4 Pro, being measured 2026-10-24.
-- Import Nova from `research_agent_part_3` (deployable, auth and Docker) or `research_agent_part_2`.
-- S1.1 voice hardening still lives in the course repo `agentic-ai-engineering-course/odd/tasks/s1-1-hardening.md`.
+- 2026-10-24 writer and editor model: `opencode_go:deepseek-v4-pro`. On the 3-post tuning set it wrote every post (VoiceAdherence 0.896 / 0.800 / 0.778, `no_invented_biography` 1.0 on the bridge post); GLM-5.3 took about 43 minutes per post and was stopped.
+- 2026-10-24 Nova is imported from `research_agent_part_3` (deployable: auth and Docker, needed by S4 anyway).
+
+## Open items
+
+- S1.1 voice hardening still lives in the course repo `agentic-ai-engineering-course/odd/tasks/s1-1-hardening.md`, uncommitted. s0-002 and s0-003 need that work committed first, because `git subtree` imports committed history only.
 
 ## Session log
 
