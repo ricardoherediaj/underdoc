@@ -26,6 +26,10 @@ echo "==> ruff format --check"
 uv run ruff format --check .
 echo "==> pytest"
 uv run pytest -q
+if [ -d packages/nova ]; then
+  echo "==> pytest (packages/nova)"
+  (cd packages/nova && uv run --package nova pytest -q)
+fi
 echo "==> Certification report"
 uv run python scripts/check_certification.py
 

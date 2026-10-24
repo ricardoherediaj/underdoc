@@ -41,18 +41,22 @@
       "area": "monorepo",
       "title": "Import Nova with git subtree into packages/nova",
       "user_visible_behavior": "Nova lives in the monorepo with its upstream history and runs under uv on Python 3.14.",
-      "status": "not_started",
+      "status": "passing",
       "verification": [
         "git subtree add completed; git log shows the upstream history",
         "uv sync --all-packages succeeds",
         "Nova's own test suite runs under ./init.sh"
       ],
-      "evidence": [],
+      "evidence": [
+        "2026-10-25 git subtree add of lessons/research_agent_part_3 as packages/nova (61691c6); 7 upstream commits in its history",
+        "2026-10-25 uv sync --all-packages: OK on Python 3.14 (requires-python bumped from ==3.12.11, package renamed nova, fastmcp 4.1.3)",
+        "2026-10-25 ./init.sh --quick: Baseline OK; root 29 passed, packages/nova 17 passed; Nova MCP server starts over stdio"
+      ],
       "certification": [],
       "depends_on": [
         "s0-001"
       ],
-      "notes": "Decided 2026-10-24: import from the course repo lessons/research_agent_part_3 (deployable, auth and Docker). Resolves assumption A4 (Python 3.14) for Nova. Needs the course repo work committed first."
+      "notes": "Decided 2026-10-24: import from the course repo lessons/research_agent_part_3 (deployable, auth and Docker). Resolves assumption A4 (Python 3.14) for Nova. Needs the course repo work committed first. Known: Nova models are Gemini-only and it needs Postgres (docker compose) for research storage; adding OpenCode Go and running locally is the next step."
     },
     {
       "id": "s0-003",

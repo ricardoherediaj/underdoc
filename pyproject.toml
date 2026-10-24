@@ -25,3 +25,5 @@ pythonpath = ["."]
 [tool.ruff]
 line-length = 140
 target-version = "py314"
+# Nova and Brown are course code imported with git subtree; they keep their own style (AGENTS.md rule 4).
+extend-exclude = ["packages"]

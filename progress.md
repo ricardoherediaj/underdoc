@@ -5,7 +5,7 @@
 - Repo root: `/Users/ricardoheredia/Documents/underdoc` (uv workspace, Python 3.14.0, public repo `ricardoherediaj/underdoc`).
 - Startup path: `./init.sh` (`./init.sh --quick` skips `uv sync`).
 - Verification path: `./init.sh` runs the feature-list check, ruff, pytest and the certification report. `uv run python scripts/check_certification.py --strict` is the certification gate (expected to fail until S3/S4 and cert-001).
-- Highest-priority unfinished feature: `s0-002` (import Nova). `s0-001` and `s3-001` are passing, commit pending owner review.
+- Highest-priority unfinished feature: `s0-003` (import Brown). `s0-001`, `s0-002` and `s3-001` are passing.
 - Current blocker: none.
 
 ## Decisions
@@ -46,3 +46,10 @@
 - API keys in `src/config/settings.py` are `SecretStr` (test asserts the key never appears in `repr`).
 - `make cert-check` still fails: README template (cert-001), HITL prompt (s3-003), custom features 0/4.
 - Next best step: review and commit phases A and B, then s0-002 (import Nova).
+
+### Session 002 (2026-10-25)
+
+- s0-002 passing: Nova imported from the course repo `lessons/research_agent_part_3` with git subtree (61691c6). `requires-python` bumped to >=3.14.0, package renamed `nova`, its own uv.lock dropped (one workspace lock), own pytest config so `src` resolves to Nova and not the root server. Root ruff excludes `packages/` (course code keeps its style). `init.sh` now also runs Nova tests.
+- Verification: `./init.sh --quick` Baseline OK (root 29 passed, Nova 17 passed); the Nova MCP server starts over stdio (FastMCP 4.1.3).
+- Known gaps before Nova can research locally: its models are Gemini-only (free tier 20 req/day) and it stores research in Postgres (docker compose).
+- Next best step: s0-003 (import Brown), then run Nova locally with OpenCode Go and Postgres.
