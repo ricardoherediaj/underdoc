@@ -5,7 +5,7 @@
 - Repo root: `/Users/ricardoheredia/Documents/underdoc` (uv workspace, Python 3.14.0, public repo `ricardoherediaj/underdoc`).
 - Startup path: `./init.sh` (`./init.sh --quick` skips `uv sync`).
 - Verification path: `./init.sh` runs the feature-list check, ruff, pytest and the certification report. `uv run python scripts/check_certification.py --strict` is the certification gate (expected to fail until S3/S4 and cert-001).
-- Highest-priority unfinished feature: `s0-003` (import Brown). `s0-001`, `s0-002` and `s3-001` are passing.
+- Highest-priority unfinished feature: `s0-004` (voice rules into `voice/`). `s0-001`, `s0-002`, `s0-003` and `s3-001` are passing.
 - Current blocker: none.
 
 ## Decisions
@@ -53,3 +53,5 @@
 - Verification: `./init.sh --quick` Baseline OK (root 29 passed, Nova 17 passed); the Nova MCP server starts over stdio (FastMCP 4.1.3).
 - Known gaps before Nova can research locally: its models are Gemini-only (free tier 20 req/day) and it stores research in Postgres (docker compose).
 - Next best step: s0-003 (import Brown), then run Nova locally with OpenCode Go and Postgres.
+- s0-003 passing: Brown imported from `lessons/writing_workflow` with git subtree (20b3d2e, 35 upstream commits). requires-python >=3.14.0, fastmcp >=2.13.1 (4.1.3), own uv.lock dropped. Brown suite 318 passed, 0 failed with no API keys: the 27 failures carried since S1 were a test-isolation bug (`s1.apply_config_file` leaked CONFIG_FILE into os.environ), fixed with an autouse fixture. `init.sh` also runs Brown tests.
+- Next best step: s0-004 (voice rules into `voice/`), then run Nova and Brown from this repo for the T10 post.

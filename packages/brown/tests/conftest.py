@@ -36,6 +36,26 @@ def setup_config_file() -> None:
     os.environ["CONFIG_FILE"] = str(config_path)
 
 
+@pytest.fixture(autouse=True)
+def restore_config_file():
+    """Undo CONFIG_FILE changes and cached settings after each test.
+
+    `s1.apply_config_file` writes CONFIG_FILE straight into os.environ; without this, a test that calls it
+    leaks the Underdoc config into later tests, which then need a real OPENCODE_API_KEY.
+    """
+    from brown.config import get_settings
+    from brown.config_app import get_app_config
+
+    original = os.environ.get("CONFIG_FILE")
+    yield
+    if original is None:
+        os.environ.pop("CONFIG_FILE", None)
+    else:
+        os.environ["CONFIG_FILE"] = original
+    get_settings.cache_clear()
+    get_app_config.cache_clear()
+
+
 @pytest.fixture
 def mock_research_content() -> str:
     """Basic research content for testing."""

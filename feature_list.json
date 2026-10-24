@@ -65,13 +65,17 @@
       "area": "monorepo",
       "title": "Import Brown with git subtree into packages/brown",
       "user_visible_behavior": "Brown lives in the monorepo; the fastmcp pin is >=2.13.1 and known-failing tests are recorded as a baseline.",
-      "status": "not_started",
+      "status": "passing",
       "verification": [
         "git subtree add completed",
         "fastmcp pin changed from ==2.12.0 to >=2.13.1 and uv sync --all-packages succeeds",
         "uv run pytest on packages/brown: failing tests match the recorded baseline file exactly"
       ],
-      "evidence": [],
+      "evidence": [
+        "2026-10-25 git subtree add of lessons/writing_workflow as packages/brown (20b3d2e); 35 upstream commits in its history",
+        "2026-10-25 uv sync --all-packages OK on Python 3.14: requires-python ==3.14.4 -> >=3.14.0, fastmcp ==2.12.0 -> >=2.13.1 (resolves 4.1.3); import brown OK",
+        "2026-10-25 Brown suite: 318 passed, 0 failed, with no API keys set. The 27 failures carried since S1 were one test-isolation bug: s1.apply_config_file leaked CONFIG_FILE into os.environ; fixed with an autouse fixture in tests/conftest.py. ./init.sh --quick Baseline OK"
+      ],
       "certification": [],
       "depends_on": [
         "s0-001"
