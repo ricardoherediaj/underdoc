@@ -4,7 +4,10 @@ version = "0.1.0"
 description = "Turn an approved post idea into a Substack draft in Ricardo's voice: research (Nova), writing (Brown) and the Underdoc MCP server."
 readme = "README.md"
 requires-python = ">=3.14.0"
-dependencies = []
+dependencies = [
+    "fastmcp>=2.13.1",
+    "pydantic-settings>=2.16.1",
+]
 
 [tool.uv.workspace]
 members = ["packages/*"]

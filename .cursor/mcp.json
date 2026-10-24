@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "underdoc": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "src.server"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "ENV_FILE_PATH": "${workspaceFolder}/.env"
+      }
+    }
+  }
+}

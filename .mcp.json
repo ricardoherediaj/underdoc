@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "underdoc": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["run", "python", "-m", "src.server"],
+      "env": {
+        "ENV_FILE_PATH": ".env"
+      }
+    }
+  }
+}

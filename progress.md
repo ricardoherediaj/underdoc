@@ -5,7 +5,7 @@
 - Repo root: `/Users/ricardoheredia/Documents/underdoc` (uv workspace, Python 3.14.0, public repo `ricardoherediaj/underdoc`).
 - Startup path: `./init.sh` (`./init.sh --quick` skips `uv sync`).
 - Verification path: `./init.sh` runs the feature-list check, ruff, pytest and the certification report. `uv run python scripts/check_certification.py --strict` is the certification gate (expected to fail until S3/S4 and cert-001).
-- Highest-priority unfinished feature: `s0-002` (import Nova). `s0-001` is passing.
+- Highest-priority unfinished feature: `s0-002` (import Nova). `s0-001` and `s3-001` are passing, commit pending owner review.
 - Current blocker: none.
 
 ## Open decisions
@@ -35,4 +35,11 @@
 - Added `Makefile` (`make help` default; `.env` guard only on `run` and `inspect`), `LICENSE` (MIT), restructured `.env.sample` (Required/Optional), `.cursor/mcp.json`, `.mcp.json`. Updated AGENTS.md (55 lines), README layout, docs/harness.md, and appended the layout amendment to the capstone plan.
 - `make verify-quick`: Baseline OK. `s0-001` set to `passing`.
 
-- Next best step: s3-001 (FastMCP skeleton in root `src/`), then s0-002 (import Nova).
+### Session 001, phase B (s3-001 skeleton)
+
+- `uv add "fastmcp>=2.13.1" pydantic-settings` resolved on Python 3.14 (fastmcp 4.1.3).
+- Created flat `src/` (server, three empty routers, settings, empty `tools/ resources/ prompts/ app/ utils/`) and tests in `tests/test_server.py` and `tests/config/test_settings.py`. Added `pythonpath = ["."]` to pytest config.
+- `make verify-quick`: Baseline OK, 29 passed. Server starts over stdio and exits 0 on EOF. `s3-001` set to `passing`.
+- API keys in `src/config/settings.py` are `SecretStr` (test asserts the key never appears in `repr`).
+- `make cert-check` still fails: README template (cert-001), HITL prompt (s3-003), custom features 0/4.
+- Next best step: review and commit phases A and B, then s0-002 (import Nova).

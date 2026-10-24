@@ -218,7 +218,7 @@
       "area": "underdoc",
       "title": "Capstone FastMCP server skeleton in root src/ (course template layout)",
       "user_visible_behavior": "A FastMCP server starts over stdio from the repo root with the course src layout and registers its three routers; capabilities are added by later features.",
-      "status": "not_started",
+      "status": "passing",
       "verification": [
         "uv run python -c \"import src.server\" succeeds",
         "A pytest builds the FastMCP app in-process and lists tools, resources and prompts (zero today, routers called)",
@@ -226,7 +226,14 @@
         "Settings read ENV_FILE_PATH (pytest with a temp env file)",
         "uv run python scripts/check_certification.py reports src layout, Cursor config and ENV_FILE_PATH as OK"
       ],
-      "evidence": [],
+      "evidence": [
+        "2026-10-24 uv run python -c \"import src.server; print('ok')\": printed ok",
+        "2026-10-24 uv run pytest (tests/test_server.py): server builds, routers called, in-process FastMCP Client lists 0 tools, 0 resources, 0 prompts; 29 passed total",
+        "2026-10-24 tests/config/test_settings.py: settings load OPENCODE_API_KEY, OPIK_WORKSPACE and UNDERDOC_HARNESS_PATH from a temp env file given via ENV_FILE_PATH",
+        "2026-10-24 stdio start: python -m src.server with stdin from /dev/null logged \"Starting MCP server 'underdoc' with transport 'stdio'\" and exited 0 on EOF",
+        "2026-10-24 .cursor/mcp.json and .mcp.json present; make cert-check: src layout OK, Cursor MCP config OK, settings read ENV_FILE_PATH OK (README, prompt and custom features still FAIL, owned by cert-001, s3-003 and custom features)",
+        "2026-10-24 make verify-quick: Baseline OK (ruff clean, 29 tests passed)"
+      ],
       "certification": [
         "mandatory:fastmcp",
         "mandatory:src-layout"
