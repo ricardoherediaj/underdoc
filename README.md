@@ -6,21 +6,37 @@ Status: skeleton (phase S0, Monorepo). Nova and Brown are imported in the next s
 
 ## Layout
 
+`(planned: <id>)` marks a folder that does not exist yet; the id is its feature in `feature_list.json`.
+
 ```
 underdoc/
-├── packages/nova/        # research agent (course research_agent_part_3), git subtree
-├── packages/brown/       # writing workflow (course writing_workflow), git subtree
 ├── src/                  # the capstone FastMCP server (course template layout)
+│   ├── server.py         #   creates the FastMCP app and registers the routers
+│   ├── routers/          #   tools.py, resources.py, prompts.py (empty until s3-002 to s3-004)
+│   ├── tools/ resources/ prompts/ app/ utils/
+│   └── config/settings.py  # pydantic-settings, reads the env file from ENV_FILE_PATH
+├── tests/                # pytest suite for src/ and scripts/
+├── scripts/              # harness checks (feature list, certification) and the Stop hook
+├── docs/
+│   ├── product/          # capstone plan
+│   ├── build-log/        # one ADR per decision
+│   └── harness.md        # how the agent harness layers fit
+├── AGENTS.md             # agent rules and session routine (CLAUDE.md imports it)
+├── feature_list.json     # features, verification commands, status and evidence
+├── progress.md           # current verified state and session log
+├── init.sh               # install and baseline verification
+├── Makefile              # `make help` lists every command
 ├── .cursor/mcp.json      # MCP client config for Cursor (.mcp.json for Claude Code)
-├── voice/                # canonical voice: rules, gates, analysis, corpus (the harness)
-├── evals/                # dataset, metrics, experiments
-├── drafts/<slug>/        # per-post working files and draft snapshots
-├── docs/product/         # capstone plan
-├── docs/build-log/       # one ADR per decision
-└── .github/workflows/    # CI and CD
+├── .claude/settings.json # Claude Code Stop hook
+├── packages/nova/        # research agent from the course, git subtree (planned: s0-002)
+├── packages/brown/       # writing workflow from the course, git subtree (planned: s0-003)
+├── voice/                # canonical voice: rules, gates, analysis, corpus (planned: s0-004)
+├── evals/                # dataset, metrics, experiments (planned: s3-007)
+├── drafts/<slug>/        # per-post working files and draft snapshots (created by the first post)
+└── .github/workflows/    # CI and CD (planned: s0-006, s4-003)
 ```
 
-It is a uv workspace: every folder under `packages/` is its own project, and all of them share one `uv.lock`.
+It is a uv workspace: every folder under `packages/` will be its own project, and all of them share one `uv.lock`.
 
 ## Setup
 
