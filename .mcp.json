@@ -7,6 +7,15 @@
       "env": {
         "ENV_FILE_PATH": ".env"
       }
+    },
+    "brown": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["--directory", "packages/brown", "run", "python", "-m", "brown.mcp.server"],
+      "env": {
+        "CONFIG_FILE": "configs/underdoc-fallback.yaml",
+        "UNDERDOC_HARNESS_PATH": "../../voice"
+      }
     }
   }
 }
