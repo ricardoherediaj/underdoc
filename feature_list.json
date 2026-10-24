@@ -1,0 +1,548 @@
+{
+  "project": "underdoc",
+  "last_updated": "2026-10-24",
+  "rules": {
+    "single_active_feature": true,
+    "passing_requires_evidence": true,
+    "do_not_skip_verification": true
+  },
+  "status_legend": {
+    "not_started": "No work yet.",
+    "in_progress": "Being worked on. At most one per branch or worktree.",
+    "blocked": "Cannot proceed; the blocker is in notes.",
+    "passing": "Verification ran and evidence is recorded."
+  },
+  "features": [
+    {
+      "id": "s0-001",
+      "priority": 1,
+      "phase": "S0",
+      "area": "harness",
+      "title": "Agent harness bootstrap",
+      "user_visible_behavior": "A fresh agent session can orient itself from the repo alone and verify the baseline with one command.",
+      "status": "passing",
+      "verification": [
+        "./init.sh passes",
+        "A fresh session with no chat history can answer what the repo does, how to start it, how to verify it, what is unfinished and what is next"
+      ],
+      "evidence": [
+        "2026-10-24 ./init.sh --quick: Baseline OK (ruff clean, 14 tests passed)",
+        "2026-10-24 fresh-session test: a separate agent with no chat history, reading only repo files from AGENTS.md, answered all five questions (purpose, start, verify, unfinished, next = s0-002). Its gaps (planned paths, harness path, Stop hook, deadline, attribution rule) were fixed in AGENTS.md",
+        "2026-10-24 make verify-quick (phase A, after cert-check/Makefile/layout changes): Baseline OK (ruff clean, 24 tests passed, certification report lists the expected FAILs for README, src layout, settings, prompt and custom features)"
+      ],
+      "certification": [],
+      "depends_on": [],
+      "notes": "Delivers AGENTS.md, CLAUDE.md, feature_list.json, progress.md, init.sh, Makefile, LICENSE, scripts/check_*.py, docs/harness.md and ADR 0001. Commit pending owner review."
+    },
+    {
+      "id": "s0-002",
+      "priority": 2,
+      "phase": "S0",
+      "area": "monorepo",
+      "title": "Import Nova with git subtree into packages/nova",
+      "user_visible_behavior": "Nova lives in the monorepo with its upstream history and runs under uv on Python 3.14.",
+      "status": "not_started",
+      "verification": [
+        "git subtree add completed; git log shows the upstream history",
+        "uv sync --all-packages succeeds",
+        "Nova's own test suite runs under ./init.sh"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s0-001"
+      ],
+      "notes": "Open decision: import from research_agent_part_3 (deployable) or research_agent_part_2. Resolves assumption A4 (Python 3.14) for Nova."
+    },
+    {
+      "id": "s0-003",
+      "priority": 3,
+      "phase": "S0",
+      "area": "monorepo",
+      "title": "Import Brown with git subtree into packages/brown",
+      "user_visible_behavior": "Brown lives in the monorepo; the fastmcp pin is >=2.13.1 and known-failing tests are recorded as a baseline.",
+      "status": "not_started",
+      "verification": [
+        "git subtree add completed",
+        "fastmcp pin changed from ==2.12.0 to >=2.13.1 and uv sync --all-packages succeeds",
+        "uv run pytest on packages/brown: failing tests match the recorded baseline file exactly"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s0-001"
+      ],
+      "notes": "Record Brown's known-failing tests as a baseline file so new failures are visible. Open decision: writer model (GLM-5.3 vs DeepSeek V4 Pro), being measured 2026-10-24."
+    },
+    {
+      "id": "s0-004",
+      "priority": 4,
+      "phase": "S0",
+      "area": "voice",
+      "title": "Promote the harness to voice/",
+      "user_visible_behavior": "The voice rules and gates live in voice/ and UNDERDOC_HARNESS_PATH points at it.",
+      "status": "not_started",
+      "verification": [
+        "voice/checks/check.py exists and runs",
+        "UNDERDOC_HARNESS_PATH in .env.sample points at voice/",
+        "init.sh no longer warns about the harness path"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s0-001"
+      ],
+      "notes": "Source today: ~/Documents/TheUnderdoc/harness. S1.1 voice hardening still lives in the course repo agentic-ai-engineering-course/odd/tasks/s1-1-hardening.md."
+    },
+    {
+      "id": "s0-005",
+      "priority": 5,
+      "phase": "S0",
+      "area": "brown",
+      "title": "Brown fails fast when the slop gate cannot run",
+      "user_visible_behavior": "With the slop gate enabled and the harness path missing or invalid, Brown stops at startup with a clear error.",
+      "status": "not_started",
+      "verification": [
+        "Unit test: gate enabled + missing path raises at startup before any node runs",
+        "Unit test: gate enabled + path without checks/check.py raises at startup",
+        "Unit test: gate disabled starts normally"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s0-003",
+        "s0-004"
+      ],
+      "notes": "Found 2026-10-24: it failed only in generate_reviews, after the writer had already run."
+    },
+    {
+      "id": "s0-006",
+      "priority": 6,
+      "phase": "S0",
+      "area": "ci",
+      "title": "CI on GitHub Actions running the init.sh verification",
+      "user_visible_behavior": "Every push and PR runs the same verification as ./init.sh.",
+      "status": "not_started",
+      "verification": [
+        ".github/workflows/ci.yml exists",
+        "A pushed branch shows a green CI run that executes ./init.sh"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s0-001"
+      ],
+      "notes": "Needs an init.sh mode that does not require local-only secrets."
+    },
+    {
+      "id": "s0-007",
+      "priority": 7,
+      "phase": "S0",
+      "area": "substack",
+      "title": "Substack cookie auth check from a Cloud Run job",
+      "user_visible_behavior": "A Cloud Run job confirms that Substack cookie auth works from a datacenter IP, failing loudly otherwise.",
+      "status": "not_started",
+      "verification": [
+        "Cloud Run job run log shows an authenticated read-only Substack call",
+        "Failure path exits non-zero with a clear message"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [],
+      "notes": "Resolves assumption A3 (partial). Pin the substack-mcp version. Publishing stays disabled. Use the Netpass GCP trial account."
+    },
+    {
+      "id": "s0-008",
+      "priority": 8,
+      "phase": "S0",
+      "area": "product",
+      "title": "Next real post produced from the monorepo",
+      "user_visible_behavior": "A real post is drafted with the monorepo pipeline and published by hand.",
+      "status": "not_started",
+      "verification": [
+        "Draft snapshot saved in drafts/<slug>/",
+        "Post published; calendar days and editing time recorded in the evidence"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s0-002",
+        "s0-003",
+        "s0-004",
+        "s0-005"
+      ],
+      "notes": "Cadence rule: a post never waits for a slice. Open decision: writer model (GLM-5.3 vs DeepSeek V4 Pro), being measured 2026-10-24."
+    },
+    {
+      "id": "s2-001",
+      "priority": 9,
+      "phase": "S2",
+      "area": "nova",
+      "title": "Nova process_local_build_tool",
+      "user_visible_behavior": "Nova reads a repo's README, docs/build-log, git log and tree and produces research where every claim cites its source.",
+      "status": "not_started",
+      "verification": [
+        "Unit tests with a fixture repo: output cites a source for every claim",
+        "Run against this repo: research.md contains no claim without a source"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s0-002"
+      ],
+      "notes": "Resolves assumption A1. Extends Nova with a new tool only. Claude Code sessions are not an input."
+    },
+    {
+      "id": "s2-002",
+      "priority": 10,
+      "phase": "S2",
+      "area": "product",
+      "title": "A build post researched by Nova",
+      "user_visible_behavior": "A real build post has its research.md produced by Nova from repo material.",
+      "status": "not_started",
+      "verification": [
+        "research.md exists in drafts/<slug>/ with every claim cited",
+        "Ricardo confirms nothing invented"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s2-001"
+      ],
+      "notes": "Real post served by slice S2."
+    },
+    {
+      "id": "s3-001",
+      "priority": 11,
+      "phase": "S3",
+      "area": "underdoc",
+      "title": "Capstone FastMCP server skeleton in root src/ (course template layout)",
+      "user_visible_behavior": "A FastMCP server starts over stdio from the repo root with the course src layout and registers its three routers; capabilities are added by later features.",
+      "status": "not_started",
+      "verification": [
+        "uv run python -c \"import src.server\" succeeds",
+        "A pytest builds the FastMCP app in-process and lists tools, resources and prompts (zero today, routers called)",
+        ".cursor/mcp.json and .mcp.json present",
+        "Settings read ENV_FILE_PATH (pytest with a temp env file)",
+        "uv run python scripts/check_certification.py reports src layout, Cursor config and ENV_FILE_PATH as OK"
+      ],
+      "evidence": [],
+      "certification": [
+        "mandatory:fastmcp",
+        "mandatory:src-layout"
+      ],
+      "depends_on": [
+        "s0-001"
+      ],
+      "notes": "settings.py uses pydantic-settings. Routers register nothing yet: tools s3-004, resources s3-002, prompts s3-003. fastmcp 4.1.3 resolved on Python 3.14."
+    },
+    {
+      "id": "s3-002",
+      "priority": 12,
+      "phase": "S3",
+      "area": "underdoc",
+      "title": "Voice exposed as MCP resources",
+      "user_visible_behavior": "An MCP client can read the voice rules and corpus examples as resources and load them into context.",
+      "status": "not_started",
+      "verification": [
+        "Client test lists and reads each voice resource",
+        "Resource content matches voice/ files byte for byte"
+      ],
+      "evidence": [],
+      "certification": [
+        "custom:resources",
+        "custom:cag",
+        "custom:custom-data"
+      ],
+      "depends_on": [
+        "s3-001",
+        "s0-004"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "s3-003",
+      "priority": 13,
+      "phase": "S3",
+      "area": "underdoc",
+      "title": "HITL prompt approving angle and structure as a diff",
+      "user_visible_behavior": "An MCP prompt chains tools and pauses for Ricardo to approve the angle and structure as a diff before writing.",
+      "status": "not_started",
+      "verification": [
+        "Prompt test: the chain does not call the writer until an approval input is given",
+        "Rejected approval returns to the angle step",
+        "Manual run in Claude Code shows the diff"
+      ],
+      "evidence": [],
+      "certification": [
+        "mandatory:hitl-prompt",
+        "custom:hitl-ux",
+        "custom:workflow-patterns"
+      ],
+      "depends_on": [
+        "s3-001"
+      ],
+      "notes": "Patterns: sequential pipeline, evaluator-optimizer, conditional routing by bucket."
+    },
+    {
+      "id": "s3-004",
+      "priority": 14,
+      "phase": "S3",
+      "area": "underdoc",
+      "title": "Substack draft tool with image upload",
+      "user_visible_behavior": "The server creates a Substack draft with structure and uploaded images; it never publishes.",
+      "status": "not_started",
+      "verification": [
+        "Test with a mocked Substack client: draft created, images uploaded, no publish call exists",
+        "Manual run creates a real draft"
+      ],
+      "evidence": [],
+      "certification": [
+        "mandatory:tool",
+        "custom:third-party-apis"
+      ],
+      "depends_on": [
+        "s3-001",
+        "s0-007"
+      ],
+      "notes": "Integration approach (MCP client vs reimplement) is decided in S3."
+    },
+    {
+      "id": "s3-005",
+      "priority": 15,
+      "phase": "S3",
+      "area": "underdoc",
+      "title": "Mermaid black-and-white theme",
+      "user_visible_behavior": "Mermaid diagrams render in the black-and-white brand theme before upload.",
+      "status": "not_started",
+      "verification": [
+        "Test: rendered output uses the theme config",
+        "Visual check of one rendered diagram recorded in evidence"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s3-004"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "s3-006",
+      "priority": 16,
+      "phase": "S3",
+      "area": "observability",
+      "title": "Opik traces for Nova, Brown and Underdoc",
+      "user_visible_behavior": "One post run shows linked traces across Nova, Brown and Underdoc in Opik.",
+      "status": "not_started",
+      "verification": [
+        "A run produces traces for all three packages in the Opik project",
+        "Generation time is readable from the traces"
+      ],
+      "evidence": [],
+      "certification": [
+        "custom:observability"
+      ],
+      "depends_on": [
+        "s3-001",
+        "s0-003"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "s3-007",
+      "priority": 17,
+      "phase": "S3",
+      "area": "evals",
+      "title": "Offline evals with the 26-post dataset and LLM judges",
+      "user_visible_behavior": "evals/ holds the labeled dataset and judges with Pydantic outputs; a run reports metrics with noise against the baseline.",
+      "status": "not_started",
+      "verification": [
+        "evals/ dataset has 26 samples with bucket labels and a 2/2/22 split",
+        "Judges return validated Pydantic models (unit test)",
+        "Baseline and noise (5 posts x 5 runs) recorded in evidence"
+      ],
+      "evidence": [],
+      "certification": [
+        "custom:evals",
+        "custom:structured-outputs",
+        "custom:custom-data"
+      ],
+      "depends_on": [
+        "s0-003",
+        "s0-004"
+      ],
+      "notes": "Voice changes count only if they beat the baseline by more than the noise. FollowsGT is reported but does not decide (metric admission rule). S1.1 voice hardening still lives in the course repo agentic-ai-engineering-course/odd/tasks/s1-1-hardening.md. Open decision: writer model (GLM-5.3 vs DeepSeek V4 Pro), being measured 2026-10-24."
+    },
+    {
+      "id": "s3-008",
+      "priority": 18,
+      "phase": "S3",
+      "area": "evals",
+      "title": "Online section-survival script with one test",
+      "user_visible_behavior": "A script computes the section survival rate between a draft snapshot and the published post.",
+      "status": "not_started",
+      "verification": [
+        "uv run pytest evals/ -q passes including the section-survival test",
+        "Script run on one real post prints the rate"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s3-007"
+      ],
+      "notes": "Definition in docs/product/capstone-plan.md section 7."
+    },
+    {
+      "id": "s4-001",
+      "priority": 19,
+      "phase": "S4",
+      "area": "quality",
+      "title": "ruff + pre-commit + Dockerfile",
+      "user_visible_behavior": "Lint, format and container build run locally and in CI.",
+      "status": "not_started",
+      "verification": [
+        "pre-commit run --all-files passes",
+        "docker build succeeds",
+        "CI runs ruff check and ruff format --check"
+      ],
+      "evidence": [],
+      "certification": [
+        "custom:code-quality-ci-docker"
+      ],
+      "depends_on": [
+        "s0-006"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "s4-002",
+      "priority": 20,
+      "phase": "S4",
+      "area": "auth",
+      "title": "Descope auth",
+      "user_visible_behavior": "The deployed server rejects unauthenticated MCP calls and accepts valid Descope tokens.",
+      "status": "not_started",
+      "verification": [
+        "Test: call without token is rejected",
+        "Test: call with a valid token succeeds"
+      ],
+      "evidence": [],
+      "certification": [
+        "custom:auth"
+      ],
+      "depends_on": [
+        "s3-001",
+        "s4-001"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "s4-003",
+      "priority": 21,
+      "phase": "S4",
+      "area": "deploy",
+      "title": "CD to Cloud Run before 2026-12-06",
+      "user_visible_behavior": "A push to main deploys the server to Cloud Run and a post can be produced through it.",
+      "status": "not_started",
+      "verification": [
+        "GitHub Actions deploy job is green",
+        "Deployed endpoint answers an authenticated tool call"
+      ],
+      "evidence": [],
+      "certification": [
+        "custom:cloud-deploy"
+      ],
+      "depends_on": [
+        "s4-001",
+        "s4-002"
+      ],
+      "notes": "Hard deadline: GCP trial credits (Netpass account) end 2026-12-06."
+    },
+    {
+      "id": "s5-001",
+      "priority": 22,
+      "phase": "S5",
+      "area": "product",
+      "title": "The post about this build, with online metrics vs baseline",
+      "user_visible_behavior": "The build post is produced by the full system and its online metrics are compared with the baseline.",
+      "status": "not_started",
+      "verification": [
+        "Draft reaches Substack within 2 days",
+        "Section survival, days to publish and editing time recorded in evidence"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "s3-004",
+        "s3-008",
+        "s4-003"
+      ],
+      "notes": "Capstone success: 2 hours or less of editing, nothing invented, follows the approved structure."
+    },
+    {
+      "id": "cert-001",
+      "priority": 23,
+      "phase": "cert",
+      "area": "certification",
+      "title": "README rewritten from the Part 4 template",
+      "user_visible_behavior": "The README follows the course template with every placeholder filled, setup steps, env vars, Cursor JSON config, required and custom feature lists.",
+      "status": "not_started",
+      "verification": [
+        "make cert-check reports the README items OK (template sections, no placeholders, Architecture >= 250 words, Cursor JSON)"
+      ],
+      "evidence": [],
+      "certification": [
+        "mandatory:readme",
+        "mandatory:no-secrets"
+      ],
+      "depends_on": [
+        "s3-001"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "cert-002",
+      "priority": 24,
+      "phase": "cert",
+      "area": "certification",
+      "title": "Submission .txt with the repo URL",
+      "user_visible_behavior": "The submission file with the public repo URL is ready.",
+      "status": "not_started",
+      "verification": [
+        "File contains the repo URL and the URL opens without login"
+      ],
+      "evidence": [],
+      "certification": [],
+      "depends_on": [
+        "cert-001",
+        "cert-003"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "cert-003",
+      "priority": 25,
+      "phase": "cert",
+      "area": "certification",
+      "title": "Public repo initialized with uv on Python 3.14",
+      "user_visible_behavior": "The public GitHub repo exists and was initialized with uv on Python 3.14.",
+      "status": "passing",
+      "verification": [
+        ".python-version starts with 3.14",
+        "git remote get-url origin returns the GitHub URL",
+        "gh repo view --json visibility reports PUBLIC"
+      ],
+      "evidence": [
+        "cat .python-version: 3.14.0 (2026-10-24)",
+        "git remote get-url origin: https://github.com/ricardoherediaj/underdoc.git",
+        "gh repo view --json visibility,url: visibility PUBLIC, url https://github.com/ricardoherediaj/underdoc (2026-10-24)"
+      ],
+      "certification": [
+        "mandatory:public-repo",
+        "mandatory:uv-py314"
+      ],
+      "depends_on": [],
+      "notes": ""
+    }
+  ]
+}

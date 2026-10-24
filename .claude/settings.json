@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/stop_hook.sh",
+            "timeout": 180,
+            "statusMessage": "Checking the baseline (./init.sh --quick)"
+          }
+        ]
+      }
+    ]
+  }
+}
