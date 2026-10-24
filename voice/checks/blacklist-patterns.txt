@@ -1,0 +1,52 @@
+# G-05 tier 2 — banned sentence structures, as regexes.
+# One regex per line, matched case-insensitively against the body text.
+# A word-only filter misses these: the vocabulary is clean, the shape is not.
+# Format: <regex><TAB><short label shown in the report>
+#
+# Levels: a line `# level: fail` (the default) makes a hit fail G-05, `# level: warn` reports the
+# hit without failing. FAIL patterns must stay at zero hits on the 26-post corpus, enforced by
+# tests/test_check.py::SlopLevelTests. A pattern that fires on honest corpus prose belongs in WARN.
+#
+# level: fail
+
+# --- Binary contrast, the most common LLM signature ---
+\bis\s+not\s+just\s+[^.!?]{1,60}?[,;]\s*it'?s\b	binary contrast ("is not just X, it's Y")
+\bisn'?t\s+just\s+[^.!?]{1,60}?[,;]\s*it'?s\b	binary contrast ("isn't just X, it's Y")
+\bit'?s\s+not\s+[^.!?]{1,60}?[,;]\s*it'?s\b	binary contrast ("it's not X, it's Y")
+\bit\s+was\s*n'?t\s+[^.!?]{1,60}?[,;]\s*it\s+was\b	binary contrast ("it wasn't X, it was Y")
+\bmore\s+than\s+just\s+[^.!?]{1,60}?[;,]\s*it'?s\b	"more than just X; it's Y"
+\bis\s+more\s+than\s+[^.!?]{1,60}?[;,]\s*it'?s\b	"X is more than Y; it's Z"
+
+# --- Faux-insight setups ---
+\bwhat\s+(nobody|no\s+one)\s+tells\s+you\b	faux-insight setup
+\bthe\s+part\s+(everyone|most\s+people)\s+miss(es)?\b	faux-insight setup
+\bwhat\s+separates\b	"what separates X from Y" (any form)
+
+# --- Two-beat reversal: "X is not A. It is B." ---
+# 0.00/article on the 26-post corpus, 0.29 in the S1 new arm, 1.00 in the S1 baseline.
+\bnot\s+[^.!?]{1,60}?\.\s+it\s+(is|was)\b	two-beat reversal ("not X. It is Y")
+
+# --- Throat-clearing openers ---
+\bin\s+today'?s\s+(fast-paced|rapidly|ever-)	"in today's fast-paced world"
+\bin\s+this\s+era\s+of\b	"in this era of"
+\bas\s+we\s+navigate\s+the\b	"as we navigate the"
+\bin\s+this\s+(post|article),?\s+(i'?ll|we'?ll|i\s+will)\b	throat-clearing ("in this post I'll")
+\bhere'?s\s+the\s+thing\b	throat-clearing ("here's the thing")
+\blet\s+me\s+be\s+clear\b	throat-clearing ("let me be clear")
+
+# --- Meta transitions ---
+\bnow\s+that\s+we'?ve\s+(explored|covered|seen|discussed)\b	meta transition
+\bthis\s+is\s+where\s+[^.!?]{1,40}?\s+comes?\s+in\b	"this is where X comes in"
+
+# --- Marketing register ---
+\bcut\s+through\s+the\s+(noise|hype|clutter)\b	marketing register
+\bwhether\s+you'?re\s+[^.!?]{1,40}?\s+or\s+[^.!?]{1,30}?,	"whether you're X or Y,"
+\bthe\s+(real\s+)?magic\s+happens\b	marketing register
+
+# --- Fake-profound ending ---
+\bthe\s+future\s+is\s*n'?t\s+coming\b	fake-profound ending
+\bthat'?s\s+it\.\s+that'?s\s+the\s+whole\b	dramatic fragment ending
+
+# level: warn
+# The ", not Y" tail is real practice in the corpus (0.12/article), so it warns and never fails.
+,\s*not\s+[A-Za-z][^.!?]{0,60}?[.!?]	", not Y" tail

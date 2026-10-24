@@ -89,13 +89,17 @@
       "area": "voice",
       "title": "Promote the harness to voice/",
       "user_visible_behavior": "The voice rules and gates live in voice/ and UNDERDOC_HARNESS_PATH points at it.",
-      "status": "not_started",
+      "status": "passing",
       "verification": [
         "voice/checks/check.py exists and runs",
         "UNDERDOC_HARNESS_PATH in .env.sample points at voice/",
         "init.sh no longer warns about the harness path"
       ],
-      "evidence": [],
+      "evidence": [
+        "2026-10-25 voice/ promoted from the private voice harness at e7fbe01 (skill, checks, analysis, pipeline, tests, corpus; 55 tracked files, no history, drafts kept private). voice/checks/check.py tests: Ran 33 tests OK",
+        "2026-10-25 .env.sample documents UNDERDOC_HARNESS_PATH as this repo's voice/; init.sh defaults it to ./voice and fails if checks/check.py is missing (no warning left)",
+        "2026-10-25 Brown slop gate loads voice/checks/check.py; Brown profiles regenerated from voice/ are byte-identical (no git diff); ~/.claude/skills/underdoc-writer now links to voice/skill. ./init.sh --quick Baseline OK (root 29, Nova 17, voice 33, Brown 318)"
+      ],
       "certification": [],
       "depends_on": [
         "s0-001"

@@ -39,8 +39,9 @@ Underdoc turns an approved post idea into a Substack draft in Ricardo's voice th
 - Startup and baseline verification: [init.sh](init.sh)
 - Harness checks (feature list, certification): [scripts/](scripts/)
 - `src/` is the capstone FastMCP server (course template layout, `uv run python -m src.server`); `make help` lists the commands
-- Planned, not created yet: `packages/nova` (s0-002), `packages/brown` (s0-003), `voice/` (s0-004), `evals/`, `drafts/<slug>/`
-- Until s0-004, set `UNDERDOC_HARNESS_PATH` in `.env` to the external harness checkout (the folder holding `checks/check.py`, today `~/Documents/TheUnderdoc/harness`)
+- `packages/nova` (research agent) and `packages/brown` (writing workflow): course code imported with git subtree; each has its own tests, run by `init.sh`
+- `voice/`: the canonical voice (skill rules, `checks/check.py` gates, brief template in `pipeline/`, corpus). `UNDERDOC_HARNESS_PATH` points here; `init.sh` sets it when unset. The `underdoc-writer` skill reads `voice/skill/`
+- Planned, not created yet: `evals/`, `drafts/<slug>/`
 - Claude Code Stop hook (`.claude/settings.json` + `scripts/stop_hook.sh`): with uncommitted changes, an agent cannot end its turn while `./init.sh --quick` fails
 - Deadline: cloud deployment and certification submitted before 2026-12-06 (trial credits end)
 

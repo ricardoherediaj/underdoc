@@ -28,9 +28,9 @@ underdoc/
 ├── Makefile              # `make help` lists every command
 ├── .cursor/mcp.json      # MCP client config for Cursor (.mcp.json for Claude Code)
 ├── .claude/settings.json # Claude Code Stop hook
-├── packages/nova/        # research agent from the course, git subtree (planned: s0-002)
-├── packages/brown/       # writing workflow from the course, git subtree (planned: s0-003)
-├── voice/                # canonical voice: rules, gates, analysis, corpus (planned: s0-004)
+├── packages/nova/        # research agent from the course (research_agent_part_3), git subtree
+├── packages/brown/       # writing workflow from the course (writing_workflow), git subtree
+├── voice/                # canonical voice: skill rules, gates (checks/), analysis, brief template, 26-post corpus
 ├── evals/                # dataset, metrics, experiments (planned: s3-007)
 ├── drafts/<slug>/        # per-post working files and draft snapshots (created by the first post)
 └── .github/workflows/    # CI and CD (planned: s0-006, s4-003)

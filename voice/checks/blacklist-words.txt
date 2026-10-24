@@ -1,0 +1,71 @@
+# G-05 tier 1 — banned words and fixed phrases.
+# One entry per line. Case-insensitive, matched on word boundaries.
+# Multi-word entries are matched as phrases with flexible whitespace.
+# Source: skill/references/ai-slop-blacklist.md (Bouchard anti-slop template, adapted).
+# The eight terms marked LIVE were found in the published corpus (15 hits total).
+
+# --- Inflated adjectives ---
+amazing
+fascinating
+mind-blowing
+must-read
+game-changer
+game-changing
+groundbreaking
+paradigm-shifting
+transformative
+pivotal
+paramount
+outstanding
+invaluable
+crucial
+crucially
+
+# --- Overloaded verbs ---
+delve
+delving
+dive into
+diving into
+embark
+endeavour
+endeavor
+leverage
+leveraging
+leverages
+harness
+harnessing
+supercharge
+elevate
+unlock
+unlocks
+unlocking
+thrive
+thriving
+
+# --- Vague grandeur nouns ---
+realm
+tapestry
+landscape
+vibrant
+
+# --- Frictionless-software register ---
+seamless
+seamlessly
+effortless
+effortlessly
+robust
+
+# --- Filler intensifiers and hedges ---
+significantly
+surprisingly
+neatly
+
+# --- Fixed phrases ---
+the world of
+a significant leap
+unlock the real power
+the best part is
+real magic happens
+recipe for disaster
+cut through the noise
+cut through the hype

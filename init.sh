@@ -9,8 +9,11 @@ quick=0
 
 echo "==> Working directory: $PWD"
 
-if [ -z "${UNDERDOC_HARNESS_PATH:-}" ] || [ ! -f "${UNDERDOC_HARNESS_PATH}/checks/check.py" ]; then
-  echo "WARNING: UNDERDOC_HARNESS_PATH is unset or has no checks/check.py (voice gates unavailable until s0-004)."
+# The voice rules and gates live in voice/; Brown's slop gate reads them through UNDERDOC_HARNESS_PATH.
+export UNDERDOC_HARNESS_PATH="${UNDERDOC_HARNESS_PATH:-$PWD/voice}"
+if [ ! -f "${UNDERDOC_HARNESS_PATH}/checks/check.py" ]; then
+  echo "ERROR: ${UNDERDOC_HARNESS_PATH}/checks/check.py not found. Point UNDERDOC_HARNESS_PATH at the voice/ folder." >&2
+  exit 1
 fi
 
 if [ "$quick" -eq 0 ]; then
@@ -30,6 +33,8 @@ if [ -d packages/nova ]; then
   echo "==> pytest (packages/nova)"
   (cd packages/nova && uv run --package nova pytest -q)
 fi
+echo "==> voice gate tests"
+(cd voice && python3 -I -m unittest discover -s tests -q)
 if [ -d packages/brown ]; then
   echo "==> pytest (packages/brown)"
   (cd packages/brown && uv run --package brown pytest -q)

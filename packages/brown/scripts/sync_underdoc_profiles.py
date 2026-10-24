@@ -16,7 +16,8 @@ import os
 import re
 from pathlib import Path
 
-DEFAULT_HARNESS = "~/Documents/TheUnderdoc/harness"
+# The canonical voice lives in the monorepo's voice/ folder (s0-004).
+DEFAULT_HARNESS = str(Path(__file__).resolve().parents[3] / "voice")
 DEFAULT_OUTPUT = Path(__file__).resolve().parents[1] / "inputs" / "profiles" / "underdoc"
 REFERENCES = "skill/references"
 SKILL = "skill/SKILL.md"
