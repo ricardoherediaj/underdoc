@@ -134,17 +134,22 @@
       "area": "ci",
       "title": "CI on GitHub Actions running the init.sh verification",
       "user_visible_behavior": "Every push and PR runs the same verification as ./init.sh.",
-      "status": "not_started",
+      "status": "passing",
       "verification": [
         ".github/workflows/ci.yml exists",
         "A pushed branch shows a green CI run that executes ./init.sh"
       ],
-      "evidence": [],
+      "evidence": [
+        ".github/workflows/ci.yml exists: jobs QA (ruff format --check, ruff check), Harness (check_feature_list.py, check_certification.py), Tests (underdoc, nova, brown) and Tests (voice gates), split like the course CI.",
+        "GitHub Actions run 41359408085 on branch ci/s0-006 (PR #2), 2026-11-01: conclusion success, all 6 jobs success. underdoc 29 passed; nova 17 passed; brown 318 passed, 3 skipped (including the 2 live OpenCode smoke tests that need OPENCODE_API_KEY); voice gates 33 tests OK.",
+        "Earlier run 41359067101 (single job running ./init.sh): success. The init.sh needs no local secrets: tests run offline with OPIK_TRACK_DISABLE=true.",
+        "Brown's profile-sync test read UNDERDOC_HARNESS_DIR, which defaulted to the old private harness and skipped in CI; init.sh and CI now point it at voice/, where it passes."
+      ],
       "certification": [],
       "depends_on": [
         "s0-001"
       ],
-      "notes": "Needs an init.sh mode that does not require local-only secrets."
+      "notes": "Split into course-style parallel jobs instead of one ./init.sh job; ./init.sh stays the local entry point with the same checks."
     },
     {
       "id": "s0-007",
