@@ -310,7 +310,7 @@
       "depends_on": [
         "s3-001"
       ],
-      "notes": "Patterns: sequential pipeline, evaluator-optimizer, conditional routing by bucket. CAG counts here, not in s3-002: the prompt must load the voice resources (voice://skill/..., chosen voice://corpus/... examples) into context."
+      "notes": "Patterns: sequential pipeline, evaluator-optimizer, conditional routing by bucket. CAG counts here, not in s3-002: the prompt must load the voice resources (voice://skill/..., chosen voice://corpus/... examples) into context. Decision 2026-11-02: approval is enforced by the server through MCP elicitation (spec 2025-06-18, ctx.elicit in FastMCP); accept writes, decline with feedback returns to the angle step, a client without elicitation fails closed. The course prompts rely on the client LLM to ask; an approve tool could be called by the LLM itself."
     },
     {
       "id": "s3-004",
