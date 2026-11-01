@@ -86,6 +86,7 @@ jobs:
     env:
       OPIK_TRACK_DISABLE: "true"
       UNDERDOC_HARNESS_PATH: ${{ github.workspace }}/voice
+      UNDERDOC_HARNESS_DIR: ${{ github.workspace }}/voice
     steps:
       - name: 🛎️ Checkout
         uses: actions/checkout@v4

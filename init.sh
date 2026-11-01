@@ -11,6 +11,8 @@ echo "==> Working directory: $PWD"
 
 # The voice rules and gates live in voice/; Brown's slop gate reads them through UNDERDOC_HARNESS_PATH.
 export UNDERDOC_HARNESS_PATH="${UNDERDOC_HARNESS_PATH:-$PWD/voice}"
+# Brown's profile-sync test reads UNDERDOC_HARNESS_DIR; point it at voice/ too, not the old private harness.
+export UNDERDOC_HARNESS_DIR="${UNDERDOC_HARNESS_DIR:-$UNDERDOC_HARNESS_PATH}"
 if [ ! -f "${UNDERDOC_HARNESS_PATH}/checks/check.py" ]; then
   echo "ERROR: ${UNDERDOC_HARNESS_PATH}/checks/check.py not found. Point UNDERDOC_HARNESS_PATH at the voice/ folder." >&2
   exit 1
