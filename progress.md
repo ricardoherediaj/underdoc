@@ -7,7 +7,7 @@
 - Verification path: `./init.sh` runs the feature-list check, ruff, pytest and the certification report. `uv run python scripts/check_certification.py --strict` is the certification gate (expected to fail until S3/S4 and cert-001).
 - Next feature: `s3-002` (voice exposed as MCP resources). `s0-001` to `s0-004` and `s3-001` are passing. Weekend plan below.
 - Real post in parallel: `s0-008` (the course repo called it T10). It does not block the plan.
-- T10 baseline point 1 (2026-10-31), "The Mental Cost of Working With AI": Brown draft from 2026-10-25 (pre-monorepo pipeline, same Brown code). Editing time about 1 h+ (Ricardo's estimate, not timed), within the 2 h target. Section survival 1/6 (17%): structure, order and facts kept, wording rewritten. Snapshot and final in `drafts/2026-10-24-mental-cost-of-ai/` (gitignored). Not marked `passing` until published.
+- T10 baseline point 1 (2026-10-31), "The Mental Cost of Working With AI": Brown draft from 2026-10-25 (pre-monorepo pipeline, same Brown code). Editing time about 1 h+ (Ricardo's estimate, not timed), within the 2 h target. Section survival 1/6 (17%): structure, order and facts kept, wording rewritten. Snapshot and final in `drafts/2026-10-24-mental-cost-of-ai/` (gitignored). Published 2026-10-31 as "The Mental Load of Working With AI" (https://ricardoheredia.substack.com/p/the-mental-load-of-working-with-ai), 6 calendar days after the draft; survival recomputed on the RSS text: 1/6. s0-008 stays open in feature_list.json because the draft came from the pre-monorepo pipeline and s0-005 is not done.
 - s3-008 note: the section-survival ratio needs `SequenceMatcher(..., autojunk=False)`. With the default, a near-identical section scored 0.10 instead of 0.91.
 - Current blocker: none.
 
