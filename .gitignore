@@ -6,3 +6,6 @@ __pycache__/
 .ruff_cache/
 .codegraph/
 outputs/
+
+# Unpublished post drafts stay local (public repo)
+drafts/

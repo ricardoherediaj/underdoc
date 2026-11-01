@@ -5,8 +5,27 @@
 - Repo root: `/Users/ricardoheredia/Documents/underdoc` (uv workspace, Python 3.14.0, public repo `ricardoherediaj/underdoc`).
 - Startup path: `./init.sh` (`./init.sh --quick` skips `uv sync`).
 - Verification path: `./init.sh` runs the feature-list check, ruff, pytest and the certification report. `uv run python scripts/check_certification.py --strict` is the certification gate (expected to fail until S3/S4 and cert-001).
-- Highest-priority unfinished feature: `s0-005` (Brown fails fast when the slop gate cannot run). `s0-001` to `s0-004` and `s3-001` are passing. Next real-world step: write the T10 post from this repo.
+- Next feature: `s3-002` (voice exposed as MCP resources). `s0-001` to `s0-004` and `s3-001` are passing. Weekend plan below.
+- Real post in parallel: `s0-008` (the course repo called it T10). It does not block the plan.
+- T10 baseline point 1 (2026-10-31), "The Mental Cost of Working With AI": Brown draft from 2026-10-25 (pre-monorepo pipeline, same Brown code). Editing time about 1 h+ (Ricardo's estimate, not timed), within the 2 h target. Section survival 1/6 (17%): structure, order and facts kept, wording rewritten. Snapshot and final in `drafts/2026-10-24-mental-cost-of-ai/` (gitignored). Published 2026-10-31 as "The Mental Load of Working With AI" (https://ricardoheredia.substack.com/p/the-mental-load-of-working-with-ai), 6 calendar days after the draft; survival recomputed on the RSS text: 1/6. s0-008 stays open in feature_list.json because the draft came from the pre-monorepo pipeline and s0-005 is not done.
+- s3-008 note: the section-survival ratio needs `SequenceMatcher(..., autojunk=False)`. With the default, a near-identical section scored 0.10 instead of 0.91.
 - Current blocker: none.
+
+## Weekend plan to certification (2026-10-31)
+
+Target: 9 custom features (the course asks for 4). Cloud goes first because GCP trial credits end 2026-12-06; Opik and evals do not depend on them.
+
+| Weekend | Block |
+| --- | --- |
+| 2026-10-31 | s3-002 voice as MCP resources (resources + custom data) |
+| 2026-11-07 | s3-003 HITL prompt and the first real tool |
+| 2026-11-14 | s3-004 Substack draft tool (third-party API) |
+| 2026-11-21 | s4-001 ruff, pre-commit, CI, Docker (absorbs s0-006) |
+| 2026-11-28 | s4-002 Descope, s4-003 Cloud Run, s0-007 Substack cookie from the cloud |
+| 2026-12-05 | Buffer for the deployment |
+| December | s3-006 Opik, s3-007 evals, cert-001 README, cert-002 submission |
+
+Product work outside the certification path (weekdays, never blocking): s0-005, s0-008, Nova on OpenCode Go and Postgres (S2). Visual map ("Mapa del capstone", private): https://claude.ai/artifact/Nfiy9QkdUq1KCqCQDicjPy
 
 ## Decisions
 
@@ -15,7 +34,7 @@
 
 ## Open items
 
-- S1.1 voice hardening still lives in the course repo `agentic-ai-engineering-course/odd/tasks/s1-1-hardening.md`, uncommitted. s0-002 and s0-003 need that work committed first, because `git subtree` imports committed history only.
+- None. (The S1.1 voice hardening was committed in the course repo and arrived with the Brown subtree import, s0-003. The course repo is lesson material only from 2026-10-31.)
 
 ## Session log
 
