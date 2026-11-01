@@ -19,8 +19,8 @@ def test_server_builds_and_registers_routers(monkeypatch):
     assert called == ["register_mcp_tools", "register_mcp_resources", "register_mcp_prompts"]
 
 
-def test_server_exposes_no_capabilities_yet():
+def test_server_exposes_voice_resources_and_no_tools_or_prompts_yet():
     tools, resources, prompts = asyncio.run(capabilities(server.create_mcp_server()))
     assert tools == []
-    assert resources == []
+    assert resources and all(str(resource.uri).startswith("voice://") for resource in resources)
     assert prompts == []
