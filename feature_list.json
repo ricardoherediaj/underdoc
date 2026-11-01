@@ -267,22 +267,25 @@
       "area": "underdoc",
       "title": "Voice exposed as MCP resources",
       "user_visible_behavior": "An MCP client can read the voice rules and corpus examples as resources and load them into context.",
-      "status": "not_started",
+      "status": "passing",
       "verification": [
         "Client test lists and reads each voice resource",
         "Resource content matches voice/ files byte for byte"
       ],
-      "evidence": [],
+      "evidence": [
+        "uv run pytest -q tests/resources: 5 passed. The client test lists 42 resources (SKILL.md, 13 references, 26 corpus posts, the brief template and the voice://corpus index) and reads each file resource; every one matches its voice/ file byte for byte.",
+        "Real stdio connection (fastmcp Client over `uv run python -m src.server`), 2026-11-02: 42 resources listed; voice://skill/references/voice-tonality.md equals the file bytes (True).",
+        "./init.sh --quick: Baseline OK (root 34 passed, Nova 17 passed, Brown 321 passed)."
+      ],
       "certification": [
         "custom:resources",
-        "custom:cag",
         "custom:custom-data"
       ],
       "depends_on": [
         "s3-001",
         "s0-004"
       ],
-      "notes": ""
+      "notes": "One resource per file so a client loads only what a post needs. UNDERDOC_HARNESS_PATH overrides the voice/ folder; a missing folder fails at startup. custom:cag moved to s3-003, where the prompt loads these resources into context."
     },
     {
       "id": "s3-003",
@@ -301,12 +304,13 @@
       "certification": [
         "mandatory:hitl-prompt",
         "custom:hitl-ux",
-        "custom:workflow-patterns"
+        "custom:workflow-patterns",
+        "custom:cag"
       ],
       "depends_on": [
         "s3-001"
       ],
-      "notes": "Patterns: sequential pipeline, evaluator-optimizer, conditional routing by bucket."
+      "notes": "Patterns: sequential pipeline, evaluator-optimizer, conditional routing by bucket. CAG counts here, not in s3-002: the prompt must load the voice resources (voice://skill/..., chosen voice://corpus/... examples) into context."
     },
     {
       "id": "s3-004",
