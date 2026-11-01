@@ -25,7 +25,7 @@ Target: 9 custom features (the course asks for 4). Cloud goes first because GCP 
 | 2026-12-05 | Buffer for the deployment |
 | December | s3-006 Opik, s3-007 evals, cert-001 README, cert-002 submission |
 
-Product work outside the certification path (weekdays, never blocking): s0-005, s0-008, Nova on OpenCode Go and Postgres (S2). Visual map: https://claude.ai/artifact/Pzkc8deHbwhQqroPPXjC4U (private).
+Product work outside the certification path (weekdays, never blocking): s0-005, s0-008, Nova on OpenCode Go and Postgres (S2). Visual map ("Mapa del capstone", private): https://claude.ai/artifact/Nfiy9QkdUq1KCqCQDicjPy
 
 ## Decisions
 
