@@ -1,6 +1,6 @@
 name: CI
 
-# Runs the same baseline verification as ./init.sh on every pull request and on every push to main.
+# Same checks as ./init.sh, split into parallel jobs the way the course CI does it.
 on:
   pull_request:
     branches: [main]
@@ -12,26 +12,114 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  baseline:
-    name: Baseline (init.sh)
+  # Lint + format check of the root code. packages/ and voice/ keep their own style (root ruff config excludes them).
+  qa:
+    name: QA (ruff)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      # Tests run offline: no API keys, no tracing.
-      OPIK_TRACK_DISABLE: "true"
     steps:
-      - name: Checkout
+      - name: 🛎️ Checkout
         uses: actions/checkout@v4
 
-      - name: Install uv
+      - name: 📦 Install uv
         uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
 
-      - name: Set up Python
+      - name: 🐍 Set up Python
         uses: actions/setup-python@v5
         with:
           python-version-file: ".python-version"
 
-      - name: Run init.sh
-        run: ./init.sh
+      - name: 🦾 Install dev tooling (ruff)
+        run: uv sync --only-dev --frozen
+
+      - name: 💅 Format check
+        run: uv run --no-sync ruff format --check .
+
+      - name: 🔎 Lint check
+        run: uv run --no-sync ruff check .
+
+  # Harness checks: feature_list.json evidence rules and the certification report.
+  harness:
+    name: Harness (feature list + certification)
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: 🦾 Install workspace
+        run: uv sync --frozen
+
+      - name: 📋 Feature list
+        run: uv run --no-sync python scripts/check_feature_list.py
+
+      - name: 🏅 Certification report
+        run: uv run --no-sync python scripts/check_certification.py
+
+  # Unit tests per workspace member. Offline: no API keys, no tracing.
+  tests:
+    name: Tests (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: underdoc
+            directory: .
+            package: underdoc
+          - project: nova
+            directory: packages/nova
+            package: nova
+          - project: brown
+            directory: packages/brown
+            package: brown
+    env:
+      OPIK_TRACK_DISABLE: "true"
+      UNDERDOC_HARNESS_PATH: ${{ github.workspace }}/voice
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: 🦾 Install workspace
+        run: uv sync --all-packages --frozen
+
+      - name: 🧪 Run tests
+        working-directory: ${{ matrix.directory }}
+        run: uv run --no-sync --package ${{ matrix.package }} pytest -q
+
+  # Deterministic voice gates (voice/checks): standard library only.
+  tests-voice:
+    name: Tests (voice gates)
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: 🧪 Run tests
+        working-directory: voice
+        run: python3 -I -m unittest discover -s tests -q
